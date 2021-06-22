@@ -1,0 +1,182 @@
+<html>
+
+<head>
+<title>Welcome To My WebGL Tutorial!</title>
+
+<h1>From tutorial1 To simple mouse drag</h1>
+<h2>written by 201823779 Hyeonseok Shin</h2>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="gl-matrix.js"> </script>
+<script type="text/javascript" src="helloVBO_orig.js">
+</script>
+
+
+</head>
+
+<body onload="main()">
+    <h1></br>Tutorial1</br></h1>
+    <img src="tutorial1.png" alt="">
+    <img src="tutorial1_2.png" alt="">
+    <p>
+        A simple thing we can do is draw a simple triangles untextured plane,</br>
+        so let's start there, by building code to draw a triangles plane.</br>
+    </p>
+    <object data="hellojs.txt" width="500" height="300" style="margin-left: 30px"></object>
+    <object data="hellojs_2.txt" width="500" height="300" style="margin-left: 30px"></object>
+    <p></br>
+        In the code above, there are some things we need to pay attention to. We need to define the shaders that will create the color</br>
+        for our simple scene as well as draw our object. These will establish how the square plane appears on the screen. A shader is a </br>
+        program, written using the OpenGL ES Shading Language, that takes information about the vertices that make up a shape and</br>
+        generates the data needed to render the pixels onto the screen: namely, the positions of the pixels and their colors. There are</br>
+        two shader functions run when drawing WebGL content: the vertex shader and the fragment shader
+    </p>
+    <div>
+        <p>
+            <h3>
+                What is a Vertex Shader?
+            </h3>
+            Vertex shader is a program code, which is called on every vertex. It transforms (move) the geometry (ex: triangle) from
+            one place to other. It handles the data of each vertex (per-vertex data) such as vertex coordinates, normals, colors,
+            and texture coordinates.
+            
+            In the ES GL code of vertex shader, programmers have to define attributes to handle data. These attributes point to a
+            Vertex Buffer Object written In JavaScript. The following tasks can be performed using vertex shaders along with vertex transformation
+            <ul>
+                <li>Vertex transformation</li>
+                <li>Normal transformation and normalization</li>
+                <li>Texture coordinate generation</li>
+                <li>Texture coordinate transformation</li>
+                <li>Lighting</li>
+                <li>Color material application</li>
+            </ul>
+            <h3>
+                What is a Fragment Shader?
+            </h3>
+            A mesh is formed by multiple triangles, and the surface of the each triangle is known as a fragment. A fragment shader
+            is the code that runs on every pixel on each fragment. This is written to calculate and fill the color on individual
+            pixels. The following tasks can be performed using fragment shaders
+            <ul>
+                <li>Operations on interpolated values</li>
+                <li>Texture access</li>
+                <li>Texture application</li>
+                <li>Fog</li>
+                <li>Color sum</li>
+            </ul>
+            
+        </p>
+    </div>
+    <h1></br>Tutorial2</br></h1>
+    <img src="tutorial2.png" alt="">
+    <img src="tutorial2_2.png" alt="">
+    <p>
+        In WebGL objects are built using sets of vertices, each of which has a position and a color. By default, all other
+        pixels' colors (and all its other attributes, including position) are computed using interpolation, automatically
+        creating smooth gradients. Previously, our vertex shader didn't apply any specific colors to the vertices. Between this
+        and the fragment shader assigning the fixed color of white to each pixel, the entire square was rendered as solid white.
+    </p>
+    <object data="vertexcolorjs.txt" width="500" height="400" style="margin-left: 30px"></object>
+    <object data="vertexcolorjs2.txt" width="500" height="400" style="margin-left: 30px"></object>
+    <div>
+        <p>
+            <h3>
+                What is a Varying?
+            </h3>
+            Varying variables provide an interface between Vertex and Fragment Shader. Vertex Shaders compute values per vertex and
+            fragment shaders compute values per fragment. If you define a varying variable in a vertex shader, its value will be
+            interpolated (perspective-correct) over the primitive being rendered and you can access the interpolated value in the
+            fragment shader.
+            
+            Varying can be used only with the data types float, vec2, vec3, vec4, mat2, mat3, mat4. (arrays of them too.)
+        </p>
+    </div>
+    <h1></br>Tutorial3</br></h1>
+    <img src="tutorial3.png" alt="">
+    <p>
+        You need to insert <a href="https://glmatrix.net/" style="background-color: yellow;">gl-matrix.js<a> file into html along with the javascript below.
+        
+    </p>
+    <object data="vertexcolorjs3.txt" width="500" height="400" style="margin-left: 30px"></object>
+    <div>
+        <p>
+            <h3>
+                How do we make the square plane?
+            </h3>
+            Before we can render our square plane, we need to create the buffer that contains its vertex positions and put the
+            vertex positions in it.
+            It starts by calling the gl object's createBuffer() method to obtain a buffer into which we'll store the vertex
+            positions. This is then bound to the context by calling the bindBuffer() method.
+            
+            Once that's done, we create a JavaScript array containing the position for each vertex of the square plane. This is then
+            converted into an array of floats and passed into the gl object's bufferData() method to establish the vertex positions
+            for the object.
+
+            Once the shaders are established, the locations are looked up, and the square plane's vertex positions put in a buffer,
+            we can actually render the scene. Since we're not animating anything in this example, our drawScene() function is very
+            simple. It uses a few utility routines we'll cover shortly.
+
+            After that, we bind the square's vertex buffer to the attribute the shader is using for aVertexPosition and we tell
+            WebGL how to pull the data out of it. Finally we draw the object by calling the drawArrays() method.
+        </p>
+    </div>
+    <h1></br>Tutorial4</br></h1>
+    <img src="tutorial4.gif" alt="">
+    <p>
+        Try different things by changing a variable like xRote, yRote!
+        Let's start by making the square rotate.
+    </p>
+    <object data="vertexrotate.txt" width="500" height="400" style="margin-left: 30px"></object>
+    <div>
+        <p>
+            <h3>
+                How do we make the square rotate?
+            </h3>
+            The first thing we'll need is a variable in which to track the current rotation of the square: zRotate: 0.0;
+            After translating to the initial drawing position for the square, we apply the rotation using "mat4.rotateZ()"
+            This rotates the modelViewMatrix by the current value of squareRotation, around the Z axis.
+            
+            To actually animate, we need to add code that changes the value of squareRotation over time. We can do that by creating
+            a new variable to track the time at which we last animated (let's call it then), then adding the following code to the
+            end of the main function
+
+            Above code uses the amount of time that's passed since the last time we updated the value of squareRotation to determine
+            how far to rotate the square.
+        </p>
+    </div>
+    <h1></br>Tutorial5</br></h1>
+    <img src="tutorial5.gif" alt="">
+    <p>
+        It's only Tutorial4 deep courses.
+    </p>
+    </p>
+    <object data="vertexrotate2.txt" width="500" height="400" style="margin-left: 30px"></object>
+    <div>
+        <p>
+            <h3>
+                How do we creating 3D square rotate?
+            </h3>
+            Let's take our square plane into three dimensions by adding five more faces to create a cube. To do this efficiently,
+            we're going to switch from drawing using the vertices directly by calling the gl.drawArrays() method to using the vertex
+            array as a table, and referencing individual vertices in that table to define the positions of each face's vertices, by
+            calling gl.drawElements().
+            
+            Consider: each face requires four vertices to define it, but each vertex is shared by three faces. We can pass a lot
+            fewer data around by building an array of all 24 vertices, then referring to each vertex by its index into that array
+            instead of moving entire sets of coordinates around. If you wonder why we need 24 vertices, and not just 8, it is
+            because each corner belongs to three faces of different colors, and a single vertex needs to have a single specific
+            color; therefore we will create three copies of each vertex in three different colors, one for each face.
+        </p>
+        <ol>
+            <li>Define the positions of the cube's vertices</li>
+            <li>Define the vertices' colors</li>
+            <li>Define the element array</li>
+            <li>Drawing the cube</li>
+        </ul>
+    </div>
+    <h1></br>Tutorial6</br></h1>
+    <img src="tutorial6.gif" alt="">
+    <canvas id="tutorial1" style="border: none; margin-right: 30px" width="350" height="350"></canvas>
+
+</body>
+</html>
+
+
