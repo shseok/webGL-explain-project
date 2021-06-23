@@ -24,8 +24,8 @@
 
 var gl;
 let drag = false;
-let original_x;
-let original_y;
+let o_x;
+let o_y;
 
 const { mat2, mat3, mat4, vec2, vec3, vec4 } = glMatrix;
 // Now we can use function without glMatrix.~~~
@@ -52,8 +52,8 @@ function initialiseGL(canvas) {
     function Downward(e) {
 
         drag = true;
-        original_x = e.pageX;
-        original_y = e.pageY;
+        o_x = e.pageX;
+        o_y = e.pageY;
         e.preventDefault();
     }
 
@@ -64,14 +64,14 @@ function initialiseGL(canvas) {
     function Moving(e) {
         if (!drag) return false;
 
-        var gap_x = e.pageX - original_x;
-        var gap_y = e.pageY - original_y;
+        var gap_x = e.pageX - o_x;
+        var gap_y = e.pageY - o_y;
 
         yRot += gap_x * 3 / canvas.width;
         xRot += gap_y * 3 / canvas.height;
 
-        original_x = e.pageX;
-        original_y = e.pageY;
+        o_x = e.pageX;
+        o_y = e.pageY;
 
         e.preventDefault();
     };
